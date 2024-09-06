@@ -15,6 +15,7 @@ type SelectedNodeProperties = {
   width: number | null;
   height: number | null;
   titleText: string | null;
+  allowsImage: boolean | null;
 };
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
     width: null,
     height: null,
     titleText: null,
+    allowsImage: null,
   });
 
   const handleAddNode = (nodeData: JSONNodeData) => {

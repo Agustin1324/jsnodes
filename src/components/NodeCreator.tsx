@@ -15,6 +15,7 @@ type NodeCreatorProps = {
     width: number | null;
     height: number | null;
     titleText: string | null;
+    allowsImage: boolean | null;
   };
 };
 
@@ -22,18 +23,38 @@ function NodeCreator({ onAddNode, selectedNodeProperties }: NodeCreatorProps) {
   const [nodeName, setNodeName] = useState('');
   const [jsonContent, setJsonContent] = useState('');
 
+  const parseFlexibleJson = (input: string): object => {
+    const result: { [key: string]: any } = {};
+    const lines = input.split('\n');
+    
+    for (const line of lines) {
+      const match = line.match(/^\s*"?(\w+)"?\s*:\s*(.+)\s*$/);
+      if (match) {
+        const [, key, value] = match;
+        try {
+          result[key] = JSON.parse(value);
+        } catch {
+          // Remove surrounding quotes and trim
+          result[key] = value.replace(/^["'](.*)["']$/, '$1').trim();
+        }
+      }
+    }
+    
+    return result;
+  };
+
   const handleAddNode = () => {
     if (nodeName && jsonContent) {
       try {
-        JSON.parse(jsonContent); // Validate JSON
-        onAddNode({ label: nodeName, json: jsonContent });
+        const parsedJson = parseFlexibleJson(jsonContent);
+        onAddNode({ label: nodeName, json: JSON.stringify(parsedJson) });
         setNodeName('');
         setJsonContent('');
       } catch (error) {
-        alert('Invalid JSON. Please check your input.');
+        alert('Invalid input. Please check your format.');
       }
     } else {
-      alert('Please enter both node name and valid JSON content.');
+      alert('Please enter both node name and properties.');
     }
   };
 
@@ -49,7 +70,13 @@ function NodeCreator({ onAddNode, selectedNodeProperties }: NodeCreatorProps) {
           className="w-full p-2 mb-2 rounded-md bg-white border border-light-brown focus:outline-none focus:ring-2 focus:ring-dark-brown"
         />
         <textarea 
-          placeholder="Enter JSON with 'backgroundColor', 'textColor', 'width', 'height', and 'titleText' properties. E.g., {'backgroundColor': '#ff0000', 'textColor': '#ffffff', 'width': 200, 'height': 100, 'titleText': 'My Node'}"
+          placeholder={`Enter properties, one per line. Example:
+"backgroundColor": "#ff0000"
+"textColor": "#ffffff"
+"width": 200
+"height": 120
+"titleText": "My Node"
+"image_import": "yes"`}
           value={jsonContent}
           onChange={(e) => setJsonContent(e.target.value)}
           className="w-full h-1/3 p-4 mb-4 rounded-md bg-white border border-light-brown focus:outline-none focus:ring-2 focus:ring-dark-brown resize-none"

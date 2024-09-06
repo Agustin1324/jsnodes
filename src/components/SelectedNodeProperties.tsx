@@ -6,6 +6,7 @@ type SelectedNodePropertiesProps = {
   width: number | null;
   height: number | null;
   titleText: string | null;
+  allowsImage: boolean | null;
 };
 
 const SelectedNodeProperties: React.FC<SelectedNodePropertiesProps> = ({ 
@@ -13,7 +14,8 @@ const SelectedNodeProperties: React.FC<SelectedNodePropertiesProps> = ({
   textColor, 
   width, 
   height,
-  titleText
+  titleText,
+  allowsImage
 }) => {
   return (
     <div className="flex flex-col mt-4">
@@ -56,10 +58,18 @@ const SelectedNodeProperties: React.FC<SelectedNodePropertiesProps> = ({
           <span className="text-gray-500">Default</span>
         )}
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center mb-2">
         <span className="mr-2">Title Text:</span>
         {titleText ? (
           <span>{titleText}</span>
+        ) : (
+          <span className="text-gray-500">Not set</span>
+        )}
+      </div>
+      <div className="flex items-center">
+        <span className="mr-2">Allows Image:</span>
+        {allowsImage !== null ? (
+          <span>{allowsImage ? 'Yes' : 'No'}</span>
         ) : (
           <span className="text-gray-500">Not set</span>
         )}

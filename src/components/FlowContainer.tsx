@@ -8,6 +8,7 @@ import JSONNode from './nodes/JSONNode';
 type JSONNodeData = {
   label: string;
   json: string;
+  image?: string;
 };
 
 type FlowProps = {
@@ -19,6 +20,7 @@ type FlowProps = {
     width: number | null;
     height: number | null;
     titleText: string | null;
+    allowsImage: boolean | null;
   }) => void;
 };
 
@@ -43,8 +45,20 @@ function Flow({ nodes: initialNodes, onAddNode, onNodeSelect }: FlowProps) {
   }, [initialNodes]);
 
   const handleNodesChange = useCallback((changes: NodeChange[]) => {
-    setNodes((nds) => applyNodeChanges(changes, nds));
-  }, [setNodes]);
+    setNodes((nds) => {
+      const updatedNodes = applyNodeChanges(changes, nds);
+      // Update the image data in the parent component if needed
+      updatedNodes.forEach((node) => {
+        if (node.data.image) {
+          const originalNode = initialNodes.find((n) => n.label === node.data.label);
+          if (originalNode) {
+            originalNode.image = node.data.image;
+          }
+        }
+      });
+      return updatedNodes;
+    });
+  }, [setNodes, initialNodes]);
 
   const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     try {
@@ -55,15 +69,16 @@ function Flow({ nodes: initialNodes, onAddNode, onNodeSelect }: FlowProps) {
         width: jsonData.width || null,
         height: jsonData.height || null,
         titleText: jsonData.titleText || node.data.label,
+        allowsImage: jsonData.image_import === 'yes',
       });
     } catch (error) {
       console.error('Error parsing JSON:', error);
-      onNodeSelect({ backgroundColor: null, textColor: null, width: null, height: null, titleText: null });
+      onNodeSelect({ backgroundColor: null, textColor: null, width: null, height: null, titleText: null, allowsImage: null });
     }
   }, [onNodeSelect]);
 
   const handlePaneClick = useCallback(() => {
-    onNodeSelect({ backgroundColor: null, textColor: null, width: null, height: null, titleText: null });
+    onNodeSelect({ backgroundColor: null, textColor: null, width: null, height: null, titleText: null, allowsImage: null });
   }, [onNodeSelect]);
 
   return (
