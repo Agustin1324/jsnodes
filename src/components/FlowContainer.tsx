@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect } from 'react';
-import ReactFlow, { Node, Edge, Controls, Background, useNodesState, useEdgesState, addEdge, applyNodeChanges } from 'reactflow';
+import ReactFlow, { Node, Edge, Controls, Background, useNodesState, useEdgesState, addEdge, applyNodeChanges, Connection } from 'reactflow';
 import 'reactflow/dist/style.css';
 import JSONNode from './nodes/JSONNode';
 
@@ -23,7 +23,7 @@ function Flow({ nodes: initialNodes, onAddNode }: FlowProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+  const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
   useEffect(() => {
     const newNodes = initialNodes.map((node, index) => ({
