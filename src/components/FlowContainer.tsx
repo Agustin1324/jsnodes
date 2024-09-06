@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect } from 'react';
-import ReactFlow, { Node, Edge, Controls, Background, useNodesState, useEdgesState, addEdge, applyNodeChanges, Connection } from 'reactflow';
+import ReactFlow, { Node, Edge, Controls, Background, useNodesState, useEdgesState, addEdge, applyNodeChanges, Connection, NodeChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import JSONNode from './nodes/JSONNode';
 
@@ -35,7 +35,7 @@ function Flow({ nodes: initialNodes, onAddNode }: FlowProps) {
     setNodes(newNodes);
   }, [initialNodes]);
 
-  const handleNodesChange = useCallback((changes) => {
+  const handleNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes((nds) => applyNodeChanges(changes, nds));
   }, [setNodes]);
 
