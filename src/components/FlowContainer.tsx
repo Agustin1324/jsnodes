@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, { Node, Edge, Controls, Background, useNodesState, useEdgesState, addEdge, applyNodeChanges, Connection, NodeChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import JSONNode from './nodes/JSONNode';
@@ -13,13 +13,14 @@ type JSONNodeData = {
 type FlowProps = {
   nodes: JSONNodeData[];
   onAddNode: (nodeData: JSONNodeData) => void;
+  onNodeSelect: (color: string | null) => void;
 };
 
 const nodeTypes = {
   jsonNode: JSONNode,
 };
 
-function Flow({ nodes: initialNodes, onAddNode }: FlowProps) {
+function Flow({ nodes: initialNodes, onAddNode, onNodeSelect }: FlowProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -39,6 +40,24 @@ function Flow({ nodes: initialNodes, onAddNode }: FlowProps) {
     setNodes((nds) => applyNodeChanges(changes, nds));
   }, [setNodes]);
 
+  const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    try {
+      const jsonData = JSON.parse(node.data.json);
+      if (jsonData.color && typeof jsonData.color === 'string') {
+        onNodeSelect(jsonData.color);
+      } else {
+        onNodeSelect(null);
+      }
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      onNodeSelect(null);
+    }
+  }, [onNodeSelect]);
+
+  const handlePaneClick = useCallback(() => {
+    onNodeSelect(null);
+  }, [onNodeSelect]);
+
   return (
     <ReactFlow
       nodes={nodes}
@@ -47,6 +66,8 @@ function Flow({ nodes: initialNodes, onAddNode }: FlowProps) {
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       nodeTypes={nodeTypes}
+      onNodeClick={handleNodeClick}
+      onPaneClick={handlePaneClick}
     >
       <Background
         color="#8B4513"

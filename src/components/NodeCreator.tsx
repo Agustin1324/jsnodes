@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react';
+import SelectedNodeColor from './SelectedNodeColor';
 
 type JSONNodeData = {
   label: string;
@@ -8,9 +9,10 @@ type JSONNodeData = {
 
 type NodeCreatorProps = {
   onAddNode: (nodeData: JSONNodeData) => void;
+  selectedNodeColor: string | null;
 };
 
-function NodeCreator({ onAddNode }: NodeCreatorProps) {
+function NodeCreator({ onAddNode, selectedNodeColor }: NodeCreatorProps) {
   const [nodeName, setNodeName] = useState('');
   const [jsonContent, setJsonContent] = useState('');
 
@@ -52,6 +54,7 @@ function NodeCreator({ onAddNode }: NodeCreatorProps) {
         >
           Add Node
         </button>
+        <SelectedNodeColor color={selectedNodeColor} />
       </div>
     </div>
   );
