@@ -13,7 +13,13 @@ type JSONNodeData = {
 type FlowProps = {
   nodes: JSONNodeData[];
   onAddNode: (nodeData: JSONNodeData) => void;
-  onNodeSelect: (backgroundColor: string | null, textColor: string | null) => void;
+  onNodeSelect: (properties: {
+    backgroundColor: string | null;
+    textColor: string | null;
+    width: number | null;
+    height: number | null;
+    titleText: string | null;
+  }) => void;
 };
 
 const nodeTypes = {
@@ -43,17 +49,21 @@ function Flow({ nodes: initialNodes, onAddNode, onNodeSelect }: FlowProps) {
   const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     try {
       const jsonData = JSON.parse(node.data.json);
-      const backgroundColor = jsonData.backgroundColor && typeof jsonData.backgroundColor === 'string' ? jsonData.backgroundColor : null;
-      const textColor = jsonData.textColor && typeof jsonData.textColor === 'string' ? jsonData.textColor : null;
-      onNodeSelect(backgroundColor, textColor);
+      onNodeSelect({
+        backgroundColor: jsonData.backgroundColor || null,
+        textColor: jsonData.textColor || null,
+        width: jsonData.width || null,
+        height: jsonData.height || null,
+        titleText: jsonData.titleText || node.data.label,
+      });
     } catch (error) {
       console.error('Error parsing JSON:', error);
-      onNodeSelect(null, null);
+      onNodeSelect({ backgroundColor: null, textColor: null, width: null, height: null, titleText: null });
     }
   }, [onNodeSelect]);
 
   const handlePaneClick = useCallback(() => {
-    onNodeSelect(null, null);
+    onNodeSelect({ backgroundColor: null, textColor: null, width: null, height: null, titleText: null });
   }, [onNodeSelect]);
 
   return (

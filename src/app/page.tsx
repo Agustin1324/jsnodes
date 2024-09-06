@@ -9,18 +9,30 @@ type JSONNodeData = {
   json: string;
 };
 
+type SelectedNodeProperties = {
+  backgroundColor: string | null;
+  textColor: string | null;
+  width: number | null;
+  height: number | null;
+  titleText: string | null;
+};
+
 export default function Home() {
   const [nodes, setNodes] = useState<JSONNodeData[]>([]);
-  const [selectedNodeBackgroundColor, setSelectedNodeBackgroundColor] = useState<string | null>(null);
-  const [selectedNodeTextColor, setSelectedNodeTextColor] = useState<string | null>(null);
+  const [selectedNodeProperties, setSelectedNodeProperties] = useState<SelectedNodeProperties>({
+    backgroundColor: null,
+    textColor: null,
+    width: null,
+    height: null,
+    titleText: null,
+  });
 
   const handleAddNode = (nodeData: JSONNodeData) => {
     setNodes((prevNodes) => [...prevNodes, nodeData]);
   };
 
-  const handleNodeSelect = (backgroundColor: string | null, textColor: string | null) => {
-    setSelectedNodeBackgroundColor(backgroundColor);
-    setSelectedNodeTextColor(textColor);
+  const handleNodeSelect = (properties: SelectedNodeProperties) => {
+    setSelectedNodeProperties(properties);
   };
 
   return (
@@ -28,8 +40,7 @@ export default function Home() {
       <div className="w-1/2 border-r-2 border-light-brown frontier-bar h-full">
         <NodeCreator 
           onAddNode={handleAddNode} 
-          selectedNodeBackgroundColor={selectedNodeBackgroundColor}
-          selectedNodeTextColor={selectedNodeTextColor}
+          selectedNodeProperties={selectedNodeProperties}
         />
       </div>
       <div className="w-1/2 h-full">

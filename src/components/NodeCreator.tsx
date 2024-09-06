@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import SelectedNodeColor from './SelectedNodeColor';
+import SelectedNodeProperties from './SelectedNodeProperties';
 
 type JSONNodeData = {
   label: string;
@@ -9,11 +9,16 @@ type JSONNodeData = {
 
 type NodeCreatorProps = {
   onAddNode: (nodeData: JSONNodeData) => void;
-  selectedNodeBackgroundColor: string | null;
-  selectedNodeTextColor: string | null;
+  selectedNodeProperties: {
+    backgroundColor: string | null;
+    textColor: string | null;
+    width: number | null;
+    height: number | null;
+    titleText: string | null;
+  };
 };
 
-function NodeCreator({ onAddNode, selectedNodeBackgroundColor, selectedNodeTextColor }: NodeCreatorProps) {
+function NodeCreator({ onAddNode, selectedNodeProperties }: NodeCreatorProps) {
   const [nodeName, setNodeName] = useState('');
   const [jsonContent, setJsonContent] = useState('');
 
@@ -44,7 +49,7 @@ function NodeCreator({ onAddNode, selectedNodeBackgroundColor, selectedNodeTextC
           className="w-full p-2 mb-2 rounded-md bg-white border border-light-brown focus:outline-none focus:ring-2 focus:ring-dark-brown"
         />
         <textarea 
-          placeholder="Enter JSON with 'backgroundColor' and 'textColor' properties. E.g., {'backgroundColor': '#ff0000', 'textColor': '#ffffff'}"
+          placeholder="Enter JSON with 'backgroundColor', 'textColor', 'width', 'height', and 'titleText' properties. E.g., {'backgroundColor': '#ff0000', 'textColor': '#ffffff', 'width': 200, 'height': 100, 'titleText': 'My Node'}"
           value={jsonContent}
           onChange={(e) => setJsonContent(e.target.value)}
           className="w-full h-1/3 p-4 mb-4 rounded-md bg-white border border-light-brown focus:outline-none focus:ring-2 focus:ring-dark-brown resize-none"
@@ -55,7 +60,7 @@ function NodeCreator({ onAddNode, selectedNodeBackgroundColor, selectedNodeTextC
         >
           Add Node
         </button>
-        <SelectedNodeColor backgroundColor={selectedNodeBackgroundColor} textColor={selectedNodeTextColor} />
+        <SelectedNodeProperties {...selectedNodeProperties} />
       </div>
     </div>
   );
