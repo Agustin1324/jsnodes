@@ -13,7 +13,7 @@ type JSONNodeData = {
 type FlowProps = {
   nodes: JSONNodeData[];
   onAddNode: (nodeData: JSONNodeData) => void;
-  onNodeSelect: (color: string | null) => void;
+  onNodeSelect: (backgroundColor: string | null, textColor: string | null) => void;
 };
 
 const nodeTypes = {
@@ -43,19 +43,17 @@ function Flow({ nodes: initialNodes, onAddNode, onNodeSelect }: FlowProps) {
   const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     try {
       const jsonData = JSON.parse(node.data.json);
-      if (jsonData.color && typeof jsonData.color === 'string') {
-        onNodeSelect(jsonData.color);
-      } else {
-        onNodeSelect(null);
-      }
+      const backgroundColor = jsonData.backgroundColor && typeof jsonData.backgroundColor === 'string' ? jsonData.backgroundColor : null;
+      const textColor = jsonData.textColor && typeof jsonData.textColor === 'string' ? jsonData.textColor : null;
+      onNodeSelect(backgroundColor, textColor);
     } catch (error) {
       console.error('Error parsing JSON:', error);
-      onNodeSelect(null);
+      onNodeSelect(null, null);
     }
   }, [onNodeSelect]);
 
   const handlePaneClick = useCallback(() => {
-    onNodeSelect(null);
+    onNodeSelect(null, null);
   }, [onNodeSelect]);
 
   return (

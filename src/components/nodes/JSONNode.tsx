@@ -8,10 +8,14 @@ type JSONNodeData = {
 
 function JSONNode({ data }: { data: JSONNodeData }) {
   let bgColor = 'bg-light-brown';
+  let textColor = 'text-dark-brown';
   try {
     const jsonData = JSON.parse(data.json);
-    if (jsonData.color && typeof jsonData.color === 'string') {
-      bgColor = jsonData.color;
+    if (jsonData.backgroundColor && typeof jsonData.backgroundColor === 'string') {
+      bgColor = jsonData.backgroundColor;
+    }
+    if (jsonData.textColor && typeof jsonData.textColor === 'string') {
+      textColor = jsonData.textColor;
     }
   } catch (error) {
     console.error('Error parsing JSON:', error);
@@ -23,7 +27,7 @@ function JSONNode({ data }: { data: JSONNodeData }) {
       style={{ backgroundColor: bgColor }}
     >
       <Handle type="target" position={Position.Top} />
-      <div className="font-bold text-dark-brown mb-2 text-center">{data.label}</div>
+      <div className="font-bold mb-2 text-center" style={{ color: textColor }}>{data.label}</div>
       <Handle type="source" position={Position.Bottom} />
     </div>
   );

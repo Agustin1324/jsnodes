@@ -9,10 +9,11 @@ type JSONNodeData = {
 
 type NodeCreatorProps = {
   onAddNode: (nodeData: JSONNodeData) => void;
-  selectedNodeColor: string | null;
+  selectedNodeBackgroundColor: string | null;
+  selectedNodeTextColor: string | null;
 };
 
-function NodeCreator({ onAddNode, selectedNodeColor }: NodeCreatorProps) {
+function NodeCreator({ onAddNode, selectedNodeBackgroundColor, selectedNodeTextColor }: NodeCreatorProps) {
   const [nodeName, setNodeName] = useState('');
   const [jsonContent, setJsonContent] = useState('');
 
@@ -43,7 +44,7 @@ function NodeCreator({ onAddNode, selectedNodeColor }: NodeCreatorProps) {
           className="w-full p-2 mb-2 rounded-md bg-white border border-light-brown focus:outline-none focus:ring-2 focus:ring-dark-brown"
         />
         <textarea 
-          placeholder="Enter JSON with a 'color' property to set the node background color. E.g., {'color': '#ff0000'}"
+          placeholder="Enter JSON with 'backgroundColor' and 'textColor' properties. E.g., {'backgroundColor': '#ff0000', 'textColor': '#ffffff'}"
           value={jsonContent}
           onChange={(e) => setJsonContent(e.target.value)}
           className="w-full h-1/3 p-4 mb-4 rounded-md bg-white border border-light-brown focus:outline-none focus:ring-2 focus:ring-dark-brown resize-none"
@@ -54,7 +55,7 @@ function NodeCreator({ onAddNode, selectedNodeColor }: NodeCreatorProps) {
         >
           Add Node
         </button>
-        <SelectedNodeColor color={selectedNodeColor} />
+        <SelectedNodeColor backgroundColor={selectedNodeBackgroundColor} textColor={selectedNodeTextColor} />
       </div>
     </div>
   );
