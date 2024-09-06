@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react';
 import SelectedNodeProperties from './SelectedNodeProperties';
+import { generateRandomNodeData } from '../utils/randomNodeGenerator';
 
 type JSONNodeData = {
   label: string;
@@ -58,6 +59,14 @@ function NodeCreator({ onAddNode, selectedNodeProperties }: NodeCreatorProps) {
     }
   };
 
+  const handleRandomize = () => {
+    const randomData = generateRandomNodeData();
+    setNodeName(randomData.label);
+    setJsonContent(Object.entries(randomData.properties)
+      .map(([key, value]) => `"${key}": ${JSON.stringify(value)}`)
+      .join('\n'));
+  };
+
   return (
     <div className="p-6 h-full flex flex-col">
       <h2 className="text-2xl font-bold mb-4 text-dark-brown">Node Creator</h2>
@@ -81,12 +90,20 @@ function NodeCreator({ onAddNode, selectedNodeProperties }: NodeCreatorProps) {
           onChange={(e) => setJsonContent(e.target.value)}
           className="w-full h-1/3 p-4 mb-4 rounded-md bg-white border border-light-brown focus:outline-none focus:ring-2 focus:ring-dark-brown resize-none"
         />
-        <button 
-          onClick={handleAddNode}
-          className="w-full py-2 bg-light-brown text-dark-brown rounded-md hover:bg-dark-brown hover:text-cream transition-colors"
-        >
-          Add Node
-        </button>
+        <div className="flex space-x-2 mb-4">
+          <button 
+            onClick={handleAddNode}
+            className="flex-1 py-2 bg-light-brown text-dark-brown rounded-md hover:bg-dark-brown hover:text-cream transition-colors"
+          >
+            Add Node
+          </button>
+          <button 
+            onClick={handleRandomize}
+            className="flex-1 py-2 bg-light-brown text-dark-brown rounded-md hover:bg-dark-brown hover:text-cream transition-colors"
+          >
+            Randomize
+          </button>
+        </div>
         <SelectedNodeProperties {...selectedNodeProperties} />
       </div>
     </div>
