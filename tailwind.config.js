@@ -7,11 +7,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        cream: {
-          light: '#FFF5E6',
-          dark: '#FAEBD7',
-        },
-        brown: '#8B4513',
+        'cream': '#f5e6d3',
+        'light-brown': '#d4c4a8',
+        'dark-brown': '#4a4a4a',
       },
     },
   },

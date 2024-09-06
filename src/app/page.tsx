@@ -1,11 +1,15 @@
 import NodeCreator from '@/components/NodeCreator';
-import FlowContainer from '@/components/FlowContainer';
+import Flow from '@/components/FlowContainer';
 
 export default function Home() {
   return (
-    <main className="flex h-screen">
-      <NodeCreator />
-      <FlowContainer />
-    </main>
+    <div className="flex w-screen h-screen bg-cream text-dark-brown">
+      <div className="w-1/2 border-r-2 border-light-brown frontier-bar h-full">
+        <NodeCreator />
+      </div>
+      <div className="w-1/2 h-full">
+        <Flow />
+      </div>
+    </div>
   );
 }

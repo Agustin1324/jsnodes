@@ -1,12 +1,23 @@
 'use client'
 
-import ReactFlow from 'reactflow';
+import { ReactFlow, Controls, Background } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-export default function FlowContainer() {
+function Flow() {
   return (
-    <div className="w-1/2 bg-cream-dark">
-      <ReactFlow />
-    </div>
+    <ReactFlow
+      nodes={[]}
+      edges={[]}
+      nodesDraggable={true}
+    >
+      <Background
+        color="#8B4513"  // Darker brown color
+        gap={20}  // Increased gap between dots
+        size={2}  // Increased dot size
+      />
+      <Controls />
+    </ReactFlow>
   );
 }
+
+export default Flow;
